@@ -7,9 +7,9 @@ import React from "react";
 export default function TestScreen() {
     const auth = useContext(AuthContext);
 
-    if(!auth.authenticated) {
-        return <Redirect href={"/(auth)"} />;
-    }
+    // if(!auth.authenticated) {
+    //     return <Redirect href={"/(auth)"} />;
+    // }
 
     return (
         <>
