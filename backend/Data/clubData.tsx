@@ -1,9 +1,9 @@
-type ItemData = {
+type ClubData = {
     name: string,
     description: string
 }
 
-export const Data: ItemData[] = [
+export const Data: ClubData[] = [
     {
         name: "Basketball",
         description: "PSU basketball club we hold public practice sessions every Tuesday/Thursday"
