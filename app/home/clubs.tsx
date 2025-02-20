@@ -3,6 +3,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useState } from "react";
 import { BlurView } from "expo-blur"
+import { useRouter } from "expo-router";
 // import ClubList from "@/components/clubList";
 // import SearchBar from "@/components/searchBar";
 // import { SearchBar } from "react-native-screens";
@@ -22,28 +23,7 @@ export default function ClubsPage() {
     const render = ({item}: {item: ItemData}) => {
         return <ClubEntry item={item} />
     }
-    // return (
-    //     <SafeAreaView style={style.bg}>
-    //         <LinearGradient
-    //             colors= {['#0F0F0F', '#1A1A1A']}
-    //             start={{ x: 1, y: 0 }}
-    //             end={{ x: 0, y: 1}}
-    //             style={style.gradient}>
-    //                 {/* <Text style={{color: "red"}}>text</Text> */}
-    //                 <SearchBar></SearchBar>
-    //         </LinearGradient>
-    //         <Text>d</Text>
-    //     </SafeAreaView>
-    // );
-
-    // return (
-    //     <SafeAreaView style={style.bg}>
-    //         <View style={style.gradient}>
-    //             <Text style={{ color: "red" }}>df</Text>
-    //         </View>
-    //     </SafeAreaView>
-    // )
-
+    
     return (
         <LinearGradient
             colors={["#020202", "#0A0A0A"]}
@@ -62,34 +42,30 @@ export default function ClubsPage() {
                             // StickyHeaderComponent={Header}
                         />
                     </View>
-                    
                 </SafeAreaView>
         </LinearGradient>
     )
 }
 
 function ClubEntry({item}: ItemProp) {
+    const router = useRouter();
+
     return (
         <View style={{ height: 150, alignItems: "center", justifyContent: "center", borderColor: "#0A0A0A", borderWidth: 0 }}>
-            <View style={{ width: "95%", height: "90%", borderColor: "yellow", borderWidth: 0, alignItems: "center", justifyContent: "center", backgroundColor: "#2A2A2A", opacity: 0.8, borderRadius: 25 }}>
+            <Pressable
+                style={{ width: "95%", height: "90%", borderColor: "yellow", borderWidth: 0, alignItems: "center", justifyContent: "center", backgroundColor: "#2A2A2A", opacity: 0.8, borderRadius: 25 }}
+                onPress={() => router.push("/clubs/basketball")}
+            >
                 <View style={{ width: "90%", height: 100, borderWidth: 1, backgroundColor: "#0E0E0E", borderRadius: 10, paddingHorizontal: 5 }}>
                     <Text style={{ textAlign: "center", color: "#888", paddingTop: 10, fontSize: 15, fontWeight: 600 }}>{item.name}</Text>
                     <Text style={{ textAlign: "center", color: "#BBB", paddingTop: 15 }}>{item.description}</Text>
                 </View>
-            </View>
+            </Pressable>
         </View>
-        
     )
 }
 
 function Header() {
-    // return (
-    //     <View style={style.container}>
-    //         <Text style={style.title}>POPN</Text>
-    //         <SearchBar />
-    //         <OptionBar />
-    //     </View>
-    // )
     return (
         <BlurView intensity={20} tint={"regular"} style={style.header}>
             <View style={{ width: "100%", height: "100%", alignItems: "center",

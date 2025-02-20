@@ -8,7 +8,7 @@ export default function HomeLayout() {
                 headerShown: false
             }} />
             <Tabs.Screen name="index" options={{
-                title: "Home",
+                title: "Events",
                 headerShown: false
             }} />
             <Tabs.Screen name="profile" options={{

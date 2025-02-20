@@ -25,3 +25,13 @@ export const Data: ClubData[] = [
         description: "South Asian Student Association. Social club for South Asian students at Penn State"
     }
 ]
+
+export function getClubByID(id: string) {
+    // For now id is the club name
+    // As we change the app we will possibly add a unique ID for each club
+    for(let i = 0; i < Data.length; i++) {
+        if(Data[i].name === id) {
+            return Data[i];
+        }
+    }
+}

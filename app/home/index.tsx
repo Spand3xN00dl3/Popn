@@ -1,28 +1,33 @@
-import { Text, StyleSheet, View, Pressable, FlatList, TextInput, ScrollView, Image } from "react-native";
+import { Text, StyleSheet, View, Pressable, FlatList, TextInput, ScrollView, Image, ImageBackground } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import LinearGradient from "react-native-linear-gradient";
-import { Data } from "@/backend/Data/clubData";
+import { Data } from "@/backend/Data/eventData";
 import { useState } from "react";
 import { BlurView } from "expo-blur";
 // import logoImage from "../../images/Popn_Logo";
 // import icon from "@/assets/images/icon"
 
-type ItemData = {
+type EventDataType = {
     name: string,
-    description: string
+    description: string,
+    city: string,
+    state: string,
+    date: Date,
+    price: number
 }
 
 export default function EventsPage() {
-    const render = ({item}: {item: ItemData}) => {
+    const render = ({item}: {item: EventDataType}) => {
         // return <ClubEntry item={item} />
-        return <EventEntry item={item} />;
+        return <EventCard event={item} />;
     }
 
     return (
         <LinearGradient
-            colors={["#020202", "#0E0E0E"]}
-            start={{ x: 1, y: 0 }}
-            end={{ x: 0, y: 1 }}
+            // colors={["#020202", "#0E0E0E"]}
+            colors={["#020202", "#1F1F1F"]}
+            start={{ x: 0, y: 1 }}
+            end={{ x: 1, y: 0 }}
             style={{ flex: 1 }}>
                 <SafeAreaView>
                     {/* <View style={style.title}>
@@ -103,8 +108,13 @@ type TextProp = {
 function OptionToggleButton({ text }: TextProp) {
     const [toggled, setToggled] = useState(false);
 
+    const toggleButton = () => {
+        setToggled(!toggled);
+        // console.error("button pressed")
+    }
+
     return (
-        <Pressable onPress={() => setToggled(!toggled)} style={{
+        <Pressable onPress={() => toggleButton()} style={{
             width: 100,
             height: "55%",
             backgroundColor: "#1A1A1A",
@@ -120,16 +130,69 @@ function OptionToggleButton({ text }: TextProp) {
     )
 }
 
-type ItemProp = {
-    item: ItemData
+type EventCardProps = {
+    event: EventDataType
 }
 
-function EventEntry({ item }: ItemProp) {
+function EventCard({ event }: EventCardProps) {
+    const monthMap: string[] = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    const hour: number = Number(event.date.toTimeString().slice(0, 2));
+    const min: string =  event.date.toTimeString().slice(3, 5);
+
     return (
-        <View style={{ height: 200, borderColor: "red", borderWidth: 0, alignItems: "center", justifyContent: "center" }}>
-            <View style={{ width: "70%", height: "90%", borderColor: "#605983", borderWidth: 1, borderRadius: 25 }}>
-                <Text style={{ color: "white", textAlign: "center", fontSize: 20, fontWeight: "bold", marginVertical: 15 }}>{item.name}</Text>
-                <Text style={{ color: "white", marginHorizontal: 15 }}>{item.description}</Text>
+        // <View style={{ height: 200, borderColor: "red", borderWidth: 0, alignItems: "center", justifyContent: "center" }}>
+        //     <View style={{ width: "70%", height: "90%", borderColor: "#605983", borderWidth: 1, borderRadius: 25 }}>
+        //         <Text style={{ color: "white", textAlign: "center", fontSize: 20, fontWeight: "bold", marginVertical: 15 }}>{item.name}</Text>
+        //         <Text style={{ color: "white", marginHorizontal: 15 }}>{item.description}</Text>
+        //     </View>
+        // </View>
+        <View style={{ height: 300, justifyContent: "center", alignItems: "center" }}>
+            <View style={{ width: "85%", height: "90%" }}>
+                <ImageBackground
+                    source={require("@/assets/images/backgroundIMG.png")}
+                    style={{ flex: 1, borderRadius: 25, overflow: "hidden", borderColor: "purple", borderWidth: 0.5 }}
+                    imageStyle={{ borderRadius: 25 }}>
+                        <View style={{ height: "70%", alignItems: "flex-end" }}>
+                            <View style={{ width: 60, height: 60, margin: 15, overflow: "hidden", borderRadius: 30, borderColor: "white", borderWidth: 0.5 }}>
+                                <BlurView
+                                    style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+                                    intensity={20}>
+                                    <Text style={{ color: "white", fontSize: 20, fontWeight: "bold" }}>
+                                        {event.date.getDate()}
+                                    </Text>
+                                    <Text style={{ color: "white" }}>
+                                        {monthMap[event.date.getMonth()]}
+                                    </Text>
+                                </BlurView>
+                            </View>
+                        </View>
+                        <BlurView 
+                            style={{
+                                height: "30%",
+                                flexDirection: "row"
+                            }}
+                            intensity={20}>
+                                <View style={{ width: "60%" }}>
+                                    <View style={{ height: "50%", paddingTop: 15 }}>
+                                        <Text style={{ color: "white", fontSize: 20, fontWeight: 500, textAlign: "center" }}>
+                                            {event.name}
+                                        </Text>
+                                    </View>
+                                    <View style={{ height: "50%", paddingTop: 5 }}>
+                                        <Text style={{ color: "white", fontSize: 15, textAlign: "center" }}>
+                                            {event.city} - {hour == 0 ? "12" : (hour > 12 ? hour - 12 : hour)}:{min } {hour < 12 ? "AM" : "PM"}
+                                        </Text>
+                                    </View>
+                                </View>
+                                <View style={{ width: "40%", justifyContent: "center", alignItems: "center" }}>
+                                    <View style={{ width: "80%", height: "45%", backgroundColor: "white", borderRadius: 15, justifyContent: "center", alignItems: "center" }}>
+                                        <Text style={{ fontWeight: "bold" }}>
+                                            {event.price === 0 ? "Free" : "$" + event.price.toFixed(2)}
+                                        </Text>
+                                    </View>
+                                </View>
+                        </BlurView>
+                </ImageBackground>
             </View>
         </View>
     )
