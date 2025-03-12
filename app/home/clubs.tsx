@@ -54,7 +54,7 @@ function ClubEntry({item}: ItemProp) {
         <View style={{ height: 150, alignItems: "center", justifyContent: "center", borderColor: "#0A0A0A", borderWidth: 0 }}>
             <Pressable
                 style={{ width: "95%", height: "90%", borderColor: "yellow", borderWidth: 0, alignItems: "center", justifyContent: "center", backgroundColor: "#2A2A2A", opacity: 0.8, borderRadius: 25 }}
-                onPress={() => router.push("/clubs/basketball")}
+                onPress={() => router.push(`/clubs/${item.name}`)}
             >
                 <View style={{ width: "90%", height: 100, borderWidth: 1, backgroundColor: "#0E0E0E", borderRadius: 10, paddingHorizontal: 5 }}>
                     <Text style={{ textAlign: "center", color: "#888", paddingTop: 10, fontSize: 15, fontWeight: 600 }}>{item.name}</Text>
