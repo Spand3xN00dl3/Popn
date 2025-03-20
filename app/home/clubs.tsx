@@ -12,7 +12,13 @@ import { Data } from "@/backend/Data/clubData";
 
 type ItemData = {
     name: string,
-    description: string
+    description: string,
+    link: string,
+    facebook: string | null,
+    linkedin: string | null,
+    instagram: string | null,
+    youtube: string | null,
+    website: string
 }
 
 type ItemProp = {

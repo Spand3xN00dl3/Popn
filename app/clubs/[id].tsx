@@ -1,13 +1,45 @@
 import { useLocalSearchParams } from "expo-router";
 import LinearGradient from "react-native-linear-gradient";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Text, View, StyleSheet } from "react-native";
+import { Text, View, StyleSheet, FlatList } from "react-native";
 import { Link, useRouter } from "expo-router";
 import { useState } from "react";
+import { getClubByID } from "@/backend/Data/clubData";
+
+type DataItem = {
+    title: string,
+    description: string
+}
+
+
+const Data = [
+    {
+        title: "Title 1",
+        description: `Lorem ipsum odor amet, consectetuer adipiscing elit. Ex ut primis faucibus praesent conubia a etiam at augue. Nostra vel per ad malesuada mattis rhoncus consectetur montes.`,
+    },
+    {
+        title: "Title 2",
+        description: `Lorem ipsum odor amet, consectetuer adipiscing elit. Ex ut primis faucibus praesent conubia a etiam at augue. Nostra vel per ad malesuada mattis rhoncus consectetur montes.`,
+    },
+    {
+        title: "Title 3",
+        description: `Lorem ipsum odor amet, consectetuer adipiscing elit. Ex ut primis faucibus praesent conubia a etiam at augue. Nostra vel per ad malesuada mattis rhoncus consectetur montes.`,
+    },
+    {
+        title: "Title 4",
+        description: `Lorem ipsum odor amet, consectetuer adipiscing elit. Ex ut primis faucibus praesent conubia a etiam at augue. Nostra vel per ad malesuada mattis rhoncus consectetur montes.`,
+    }
+]
 
 export default function ClubProfilePage() {
     const { id } = useLocalSearchParams();
     const router = useRouter();
+
+    const render = ({ item }: {item: DataItem}) => {
+        return (
+            <AnnouncementItem data={item} />
+        );
+    };
 
     return (
         <LinearGradient
@@ -21,12 +53,18 @@ export default function ClubProfilePage() {
                 {/* <View style={{ width: }}> */}
     
                 {/* </View> */}
-                <Header id={String(id)} />
+                {/* <Header id={String(id)} /> */}
                 {/* <Divider /> */}
                 {/* <ClubInfo /> */}
-                <View>
+                {/* <View>
                     <AnnouncementItem />
-                </View>
+                </View> */}
+                <FlatList
+                    data={Data}
+                    renderItem={render}
+                    ListHeaderComponent={<Header id={String(id)} />}
+                    stickyHeaderIndices={[0]}
+                />
             </SafeAreaView>
         </LinearGradient>
     )
@@ -44,12 +82,23 @@ type HeaderProps = {
     id: string
 }
 
+type ClubEntry = {
+    name: string,
+    description: string,
+    link: string,
+    facebook: string | null,
+    linkedin: string | null,
+    instagram: string | null,
+    youtube: string | null,
+    website: string
+}
+
 function Header({ id }: HeaderProps) {
     const router = useRouter();
-
+    const info: ClubEntry = getClubByID(id);
     // return <Text>dfsf</Text>
     return (
-        <View style={{ height: "40%", backgroundColor: "#202020", borderColor: "#605983", borderWidth: 0, borderBottomWidth: 2 }}>
+        <View style={{ height: 300, backgroundColor: "#202020", borderColor: "#605983", borderWidth: 0, borderBottomWidth: 2 }}>
             <View style={{ height: "10%", borderColor: "white", borderWidth: 0 }}>
                 <Text
                     onPress={() => router.back()}
@@ -106,12 +155,28 @@ function Icon({ size=75 }: IconProps) {
     );
 }
 
-function AnnouncementItem() {
-    return (
-        <View style={{ width: "100%", height: 200, justifyContent: "center", alignItems: "center", borderColor: "white", borderWidth: 1 }}>
-            <View style={{ width: "90%", height: 150, backgroundColor: "#202020", borderColor: "#605983", borderWidth: 1, borderRadius: 10 }}>
+type DataProp = {
+    data: DataItem
+}
 
+function AnnouncementItem({data}: DataProp) {
+    return (
+        <View style={{ width: "100%", height: 200, justifyContent: "center", alignItems: "center", borderColor: "white", borderWidth: 0 }}>
+            <View style={{ width: "90%", height: 150, backgroundColor: "#202020", borderColor: "#605983", borderWidth: 1, borderRadius: 10 }}>
+                <Text style={textStyle.announcementTitle}>{data.title}</Text>
+                <Text style={{height: "75%", color: "white", padding: "5%"}}>{data.description}</Text>
             </View>
         </View>
     )
 }
+
+const textStyle = StyleSheet.create({
+    announcementTitle: {
+        height: "25%",
+        color: "white",
+        fontSize: 20,
+        fontWeight: 600,
+        textAlign: "center",
+        padding: "2.5%"
+    },
+})
