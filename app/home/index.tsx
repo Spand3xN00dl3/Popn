@@ -1,7 +1,7 @@
 import { Text, StyleSheet, View, Pressable, FlatList, TextInput, ScrollView, Image, ImageBackground } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import LinearGradient from "react-native-linear-gradient";
-import { Data } from "@/backend/Data/eventData";
+import { Data } from "@/data_temp/eventData";
 import { useState } from "react";
 import { BlurView } from "expo-blur";
 // import logoImage from "../../images/Popn_Logo";

@@ -1,13 +1,13 @@
 import { Text, View, TextInput, StyleSheet, Pressable, ImageBackground, ScrollView, FlatList } from "react-native";
 import LinearGradient from 'react-native-linear-gradient';
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { BlurView } from "expo-blur"
 import { useRouter } from "expo-router";
 // import ClubList from "@/components/clubList";
 // import SearchBar from "@/components/searchBar";
 // import { SearchBar } from "react-native-screens";
-import { Data } from "@/backend/Data/clubData";
+// import { Data } from "@/data_temp/clubData";
 
 
 type ItemData = {
@@ -25,7 +25,26 @@ type ItemProp = {
     item: ItemData,
 }
 
+const API_URL = "http://localhost:3000/clubs"
+
 export default function ClubsPage() {
+    const [Data, setData] = useState([]);
+    useEffect(() => {
+        fetchData();
+    }, []);
+
+    const fetchData = async () => {
+        try {
+            const response = await fetch(API_URL);
+            const json = await response.json();
+            setData(json);
+        } catch (error) {
+            console.error("Error fetching data:", error);
+        } finally {
+            // setLoading(false);
+        }
+    };
+
     const render = ({item}: {item: ItemData}) => {
         return <ClubEntry item={item} />
     }
@@ -38,7 +57,7 @@ export default function ClubsPage() {
             style={style.gradient}>
                 <SafeAreaView style={{ flex: 1 }}>
                     <View style={{ flex: 1 }}>
-                        <FlatList 
+                        <FlatList
                             data={Data}
                             renderItem={render}
                             // contentContainerStyle={}

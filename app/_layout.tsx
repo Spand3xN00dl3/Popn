@@ -7,11 +7,26 @@ const users: {[key: string]: string} = {};
 users["user1"] = "password123"
 users["User2"] = "Password"
 
-
 export default function RootLayout() {
     const [authorized, setAuthorized] = useState(false);
     const [username, setUsername] = useState("");
     const logIn = (user: string, pass: string) => {
+        // try {
+        //     const response = await fetch(backendURL + "/login", {
+        //         method: "POST",
+        //         headers: { "Content-Type": "application/json" },
+        //         body: JSON.stringify({
+        //             email: user,
+        //             password: pass
+        //         })
+        //     });
+
+        //     if(response.status===401) 
+        // }
+        // catch(err) {
+        //     console.error("Unexpected error:", err);
+        //     return "failure";
+        // }
         if(user in users && users[user] === pass) {
             setAuthorized(true);
             return "success";   

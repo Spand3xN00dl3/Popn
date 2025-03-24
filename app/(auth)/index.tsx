@@ -2,7 +2,7 @@ import { View, Text, StyleSheet, TextInput, Pressable } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useState, useContext } from "react";
 import { AuthContext } from "@/contexts/AuthContext";
-import { Link, Redirect } from "expo-router";
+import { Link, Redirect, useRouter } from "expo-router";
 import Logo from "@/components/logo";
 import SubmitButton from "@/components/submitButton";
 import LinearGradient from "react-native-linear-gradient";
@@ -12,6 +12,11 @@ export default function Login() {
     const [password, setPassword] = useState("");
     const [status, setStatus] = useState("");
     const auth = useContext(AuthContext);
+    const router = useRouter();
+
+    const goToTest = () => {
+        router.navigate("/(test)");
+    }
 
     if(auth.authenticated) {
         return <Redirect href="/home" />;
@@ -37,6 +42,9 @@ export default function Login() {
                         }}/>
                         <Link href={"/signUp"} style={style.signUp}>
                             Sign Up
+                        </Link>
+                        <Link href={"/(test)"} style={{ backgroundColor: "white" }}>
+                            go test
                         </Link>
                     </View>
                     <Text style={style.statusBar}>{status}</Text>
