@@ -1,17 +1,18 @@
 import { createContext } from "react";
 
-export const AuthContext = createContext<{
+type responseType = {
+    approved: boolean,
+    message: string
+};
+
+const AuthContext = createContext<{
     authenticated: boolean,
+    setAuthenticated: (authenticated: boolean) => void,
     username: string,
     setUsername: (user: string) => void,
-    logIn: (user: string, pass: string) => string,
-    signUp: (user: string, pass: string) => string,
+    logIn: (user: string, pass: string) => Promise<responseType>,
+    signUp: (user: string, pass: string) => Promise<responseType>,
     logOut: () => void
-}>({
-    authenticated: false,
-    username: "",
-    setUsername: (user: string) => null,
-    logIn: (user: string, pass: string) => "",
-    signUp: (user: string, pass: string) => "",
-    logOut: () => null
-});
+} | null>(null);
+
+export { responseType, AuthContext };

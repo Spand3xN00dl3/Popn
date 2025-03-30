@@ -1,13 +1,13 @@
 import { View, Text, StyleSheet, TextInput, Pressable } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useState, useContext } from "react";
-import { AuthContext } from "@/contexts/AuthContext";
+import { AuthContext, responseType } from "@/contexts/AuthContext";
 import { Link, Redirect, useRouter } from "expo-router";
 import Logo from "@/components/logo";
 import SubmitButton from "@/components/submitButton";
 import LinearGradient from "react-native-linear-gradient";
 
-export default function Login() {
+export default function LoginPage() {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [status, setStatus] = useState("");
@@ -18,7 +18,7 @@ export default function Login() {
         router.navigate("/(test)");
     }
 
-    if(auth.authenticated) {
+    if(auth && auth.authenticated) {
         return <Redirect href="/home" />;
     }
 
@@ -33,21 +33,26 @@ export default function Login() {
                     <View style={style.container}>
                         <TextInput placeholder="Username" style={style.input} onChangeText={text => setUsername(text)} placeholderTextColor={"#605983"} />
                         <TextInput placeholder="Password" style={style.input} onChangeText={text => setPassword(text)} placeholderTextColor={"#605983"} />
-                        <SubmitButton text="Login" onClick={() => {
-                            const res: string = auth.logIn(username, password);
-
-                            if(res === "failed") {
-                                setStatus("Incorrect Username or Password");
+                        <Text style={style.statusBar}>{status}</Text>
+                        <SubmitButton text="Login" onClick={async () => {
+                            if(auth) {
+                                const res: responseType = await auth.logIn(username, password);
+                                console.log(res);
+                                if(res.approved) {
+                                    auth.setAuthenticated(true);
+                                } else {
+                                    setStatus(res.message);
+                                }
                             }
+                            
                         }}/>
-                        <Link href={"/signUp"} style={style.signUp}>
+                        <Link href={"/(auth)/signup"} style={style.signUp}>
                             Sign Up
                         </Link>
-                        <Link href={"/(test)"} style={{ backgroundColor: "white" }}>
+                        {/* <Link href={"/(test)"} style={{ backgroundColor: "white" }}>
                             go test
-                        </Link>
+                        </Link> */}
                     </View>
-                    <Text style={style.statusBar}>{status}</Text>
                 </SafeAreaView>                
         </LinearGradient>
         

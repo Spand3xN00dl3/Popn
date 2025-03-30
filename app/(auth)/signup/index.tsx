@@ -1,29 +1,37 @@
-import { Text, StyleSheet, Pressable, View, TextInput } from "react-native";
+import { Text, StyleSheet, Pressable, View, TextInput, Image } from "react-native";
 import { useState } from "react";
 import LinearGradient from "react-native-linear-gradient";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Link } from "expo-router";
 
-export default function SignUp() {
+export default function SignUpPage() {
+    const [credentialsInputted, setCredentialsInputted] = useState(false);
+
     return (
         <LinearGradient
-            colors={["#020202", "#0E0E0E"]}
+            colors={["#020202", "#0A0A0A"]}
             start={{ x: 1, y: 0 }}
             end={{ x: 0, y: 1 }}
             style={{ flex: 1 }}>
                 <SafeAreaView>
-                    <Link href={"/"} style={{ color: "white", borderColor: "white", borderWidth: 0 }}>Back</Link>
-                    <View style={{ height: 300, justifyContent: "center", borderColor: "red", borderWidth: 0}}>
-                        <Text style={style.title}>POPN</Text>
+                    {/* <Header /> */}
+                    <View style={{ alignItems: "center", borderColor: "yellow", borderWidth: 1 }}>
+                        <Image source={require("@/assets/images/Popn_Logo.png")} style={{ width: 200, height: 50, borderColor: "red", borderWidth: 1 }} />
                     </View>
                     <View style={{ height: 200, borderColor: "yellow", borderWidth: 0, alignItems: "center" }}>
-                        <TextInput placeholder="Username" style={style.input} placeholderTextColor={"#605983"} />
+                        <TextInput placeholder="Email" style={style.input} placeholderTextColor={"#605983"} />
                         <TextInput placeholder="Password" style={style.input} placeholderTextColor={"#605983"} />
                     </View>
                     <ToggleButton text="Basketball" />
                 </SafeAreaView>
         </LinearGradient>
     )
+}
+
+function Header() {
+    return (
+        <Link href={"/"} style={{ color: "white", borderColor: "white", borderWidth: 0 }}>Back</Link>
+    );
 }
 
 type TextProp = {
@@ -55,10 +63,7 @@ function ToggleButton({ text }: TextProp) {
 
 const style = StyleSheet.create({
     title: {
-        color: "white",
-        fontSize: 80,
-        fontWeight: "bold",
-        textAlign: "center"
+        // height: 100
     },
     input: {
         width: "70%",
