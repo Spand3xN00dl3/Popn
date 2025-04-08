@@ -3,16 +3,16 @@ import LinearGradient from "react-native-linear-gradient";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Text, View, StyleSheet, FlatList } from "react-native";
 import { Link, useRouter } from "expo-router";
-import { useState } from "react";
-import { getClubByID } from "@/backend/Data/clubData";
+import { useEffect, useState } from "react";
+import { getClubByID } from "@/data_temp/clubData";
+import { FacebookLogo, LinkedinLogo, InstagramLogo, YoutubeLogo } from "@/components/logos";
 
 type DataItem = {
     title: string,
     description: string
 }
 
-
-const Data = [
+const announcement_data = [
     {
         title: "Title 1",
         description: `Lorem ipsum odor amet, consectetuer adipiscing elit. Ex ut primis faucibus praesent conubia a etiam at augue. Nostra vel per ad malesuada mattis rhoncus consectetur montes.`,
@@ -29,11 +29,12 @@ const Data = [
         title: "Title 4",
         description: `Lorem ipsum odor amet, consectetuer adipiscing elit. Ex ut primis faucibus praesent conubia a etiam at augue. Nostra vel per ad malesuada mattis rhoncus consectetur montes.`,
     }
-]
+];
+
+
 
 export default function ClubProfilePage() {
     const { id } = useLocalSearchParams();
-    const router = useRouter();
 
     const render = ({ item }: {item: DataItem}) => {
         return (
@@ -49,18 +50,8 @@ export default function ClubProfilePage() {
             style={{ flex: 1 }}
         >
             <SafeAreaView style={{ flex: 1 }}>
-                {/* <Text style={{color: "white", fontSize: 20, fontWeight: "bold", textAlign: "center" }}>{id.toString()}</Text> */}
-                {/* <View style={{ width: }}> */}
-    
-                {/* </View> */}
-                {/* <Header id={String(id)} /> */}
-                {/* <Divider /> */}
-                {/* <ClubInfo /> */}
-                {/* <View>
-                    <AnnouncementItem />
-                </View> */}
                 <FlatList
-                    data={Data}
+                    data={announcement_data}
                     renderItem={render}
                     ListHeaderComponent={<Header id={String(id)} />}
                     stickyHeaderIndices={[0]}
@@ -70,13 +61,13 @@ export default function ClubProfilePage() {
     )
 }
 
-function Divider() {
-    return (
-        <View style={{ alignItems: "center", marginVertical: 10 }}>
-            <View style={{ width: 300, borderColor: "grey", borderWidth: 1 }} />
-        </View>
-    )
-}
+// function Divider() {
+//     return (
+//         <View style={{ alignItems: "center", marginVertical: 10 }}>
+//             <View style={{ width: 300, borderColor: "grey", borderWidth: 1 }} />
+//         </View>
+//     )
+// }
 
 type HeaderProps = {
     id: string
@@ -94,34 +85,41 @@ type ClubEntry = {
 }
 
 function Header({ id }: HeaderProps) {
-    const router = useRouter();
-    const info: ClubEntry = getClubByID(id);
-    // return <Text>dfsf</Text>
+    const [Data, setData] = useState({
+        name: "none",
+        description: "none",
+        link: "none",
+        facebook: "none",
+        linkedin: "none",
+        instagram: "none",
+        youtube: "none",
+        website: "none"
+    });
+    const API_URL = `http://localhost:3000/clubs/${id}`;
+
+    useEffect(() => {
+        fetchData();
+    }, []);
+
+    const fetchData = async () => {
+        try {
+            const response = await fetch(API_URL);
+            const json = await response.json();
+            setData(json);
+        } catch (error) {
+            console.error("Error fetching data:", error);
+        }
+    };
+
     return (
-        <View style={{ height: 300, backgroundColor: "#202020", borderColor: "#605983", borderWidth: 0, borderBottomWidth: 2 }}>
-            <View style={{ height: "10%", borderColor: "white", borderWidth: 0 }}>
-                <Text
-                    onPress={() => router.back()}
-                    style={{
-                        color: "white", 
-                        fontSize: 15,
-                        width: 40,
-                        textAlign: "center",
-                        borderColor: "#605983",
-                        borderWidth: 1
-                    }}
-                >
-                    back
-                </Text>
-            </View>
-            <View style={{ height: "20%", borderColor: "blue", borderWidth: 0 }} />
-            <View style={{ height: "30%", flexDirection: "row", borderColor: "red", borderWidth: 0 }}>
+        <View style={styles.headerContainer}>
+            <TitleBar />
+            <View style={{ height: "10%" }} />
+            <View style={{ height: "30%", flexDirection: "row" }}>
                 <View style={{ width: "10%" }} />
                 <Icon />
                 <View style={{ width: "10%" }} />
-                <Text style={{ width: "50%", color: "white", fontSize: 25, fontWeight: "bold", textAlign: "center", paddingVertical: 25 }}>
-                    {id ? id.toUpperCase() : "error"}
-                </Text>
+                <Text style={textStyle.clubName}>{Data.name}</Text>
             </View>
             <View style={{ height: "15%", flexDirection: "row", alignItems: "center", borderColor: "yellow", borderWidth: 0 }}>
                 <View style={{ width: "10%" }} />
@@ -131,14 +129,55 @@ function Header({ id }: HeaderProps) {
                 </View>
                 <View style={{ width: "50%", borderColor: "white", borderWidth: 0, justifyContent: "center" }}>
                     <Text style={{ color: "white", textAlign: "center", fontWeight: "bold" }}>Social Media Links</Text>
+                    <View style={{ height: "50%", flexDirection: "row", justifyContent: "center", gap: 10, borderWidth: 0, borderColor: "red" }}>
+                        {/* <FacebookLogo url={""} />
+                        <LinkedinLogo url={""} />
+                        <InstagramLogo url={""} />
+                        <YoutubeLogo url={""} /> */}
+                        <SocialMediaLinks
+                            facebook={Data.facebook}
+                            linkedin={Data.linkedin}
+                            instagram={Data.instagram}
+                            youtube={Data.youtube}
+                        />
+                    </View>
+                    {/* <InstagramLogo link={"df"} /> */}
                 </View>
             </View>
             <View style={{ height: "5%" }} />
             <View style={{ height: "20%", paddingHorizontal: "2.5%", borderColor: "orange", borderWidth: 0 }}>
-                <Text style={{ color: "white" }}>Description: Lorem ipsum odor amet, consectetuer adipiscing elit. Volutpat iaculis ipsum viverra, lacus venenatis sagittis per.</Text>
+                <Text style={{ color: "white" }}>Description: {Data.description}</Text>
             </View>
         </View>
     );
+}
+
+type SocialMediaLinksProps = {
+    facebook: string | null,
+    linkedin: string | null,
+    instagram: string | null,
+    youtube: string | null
+}
+
+function SocialMediaLinks({ facebook, linkedin, instagram, youtube }: SocialMediaLinksProps) {
+    return (
+        <>
+            {facebook && <FacebookLogo url={facebook}/>}
+            {linkedin && <LinkedinLogo url={linkedin}/>}
+            {instagram && <InstagramLogo url={instagram}/>}
+            {youtube && <YoutubeLogo url={youtube}/>}
+        </>
+    )
+}
+
+function TitleBar() {
+    const router = useRouter();
+
+    return (
+        <View style={{ height: "10%", borderColor: "white", borderWidth: 1 }}>
+            <Text onPress={() => router.back()} style={styles.backButton}>back</Text>
+        </View>
+    )
 }
 
 type IconProps = {
@@ -170,7 +209,33 @@ function AnnouncementItem({data}: DataProp) {
     )
 }
 
+const styles = StyleSheet.create({
+    headerContainer: {
+        height: 300,
+        backgroundColor: "#202020",
+        borderColor: "#605983",
+        borderWidth: 0,
+        borderBottomWidth: 2
+    },
+    backButton: {
+        color: "white", 
+        fontSize: 15,
+        width: 40,
+        textAlign: "center",
+        borderColor: "#605983",
+        borderWidth: 1
+    }
+})
+
 const textStyle = StyleSheet.create({
+    clubName: {
+        width: "50%",
+        color: "white",
+        fontSize: 25,
+        fontWeight: "bold",
+        textAlign: "center",
+        paddingVertical: 25
+    },
     announcementTitle: {
         height: "25%",
         color: "white",

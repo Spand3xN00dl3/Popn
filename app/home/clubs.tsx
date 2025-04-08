@@ -1,31 +1,44 @@
 import { Text, View, TextInput, StyleSheet, Pressable, ImageBackground, ScrollView, FlatList } from "react-native";
 import LinearGradient from 'react-native-linear-gradient';
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { BlurView } from "expo-blur"
 import { useRouter } from "expo-router";
 // import ClubList from "@/components/clubList";
 // import SearchBar from "@/components/searchBar";
 // import { SearchBar } from "react-native-screens";
-import { Data } from "@/backend/Data/clubData";
+// import { Data } from "@/data_temp/clubData";
 
 
 type ItemData = {
     name: string,
     description: string,
-    link: string,
-    facebook: string | null,
-    linkedin: string | null,
-    instagram: string | null,
-    youtube: string | null,
-    website: string
 }
 
 type ItemProp = {
     item: ItemData,
 }
 
+const API_URL = "http://localhost:3000/clubs"
+
 export default function ClubsPage() {
+    const [Data, setData] = useState([]);
+    useEffect(() => {
+        fetchData();
+    }, []);
+
+    const fetchData = async () => {
+        try {
+            const response = await fetch(API_URL);
+            const json = await response.json();
+            setData(json);
+        } catch (error) {
+            console.error("Error fetching data:", error);
+        } finally {
+            // setLoading(false);
+        }
+    };
+
     const render = ({item}: {item: ItemData}) => {
         return <ClubEntry item={item} />
     }
@@ -38,7 +51,7 @@ export default function ClubsPage() {
             style={style.gradient}>
                 <SafeAreaView style={{ flex: 1 }}>
                     <View style={{ flex: 1 }}>
-                        <FlatList 
+                        <FlatList
                             data={Data}
                             renderItem={render}
                             // contentContainerStyle={}
@@ -57,14 +70,23 @@ function ClubEntry({item}: ItemProp) {
     const router = useRouter();
 
     return (
-        <View style={{ height: 150, alignItems: "center", justifyContent: "center", borderColor: "#0A0A0A", borderWidth: 0 }}>
+        <View style={{ height: 150, alignItems: "center", justifyContent: "center", borderColor: "blue", borderWidth: 0 }}>
             <Pressable
-                style={{ width: "95%", height: "90%", borderColor: "yellow", borderWidth: 0, alignItems: "center", justifyContent: "center", backgroundColor: "#2A2A2A", opacity: 0.8, borderRadius: 25 }}
+                style={{
+                    width: "95%",
+                    height: "90%",
+                    borderColor: "yellow",
+                    borderWidth: 0,
+                    alignItems: "center",
+                    justifyContent: "center",
+                    // backgroundColor: "#2A2A2A",
+                    opacity: 0.8
+                }}
                 onPress={() => router.push(`/clubs/${item.name}`)}
             >
-                <View style={{ width: "90%", height: 100, borderWidth: 1, backgroundColor: "#0E0E0E", borderRadius: 10, paddingHorizontal: 5 }}>
+                <View style={{ width: "90%", height: 100, backgroundColor: "#2A2A2A", paddingHorizontal: 5, shadowOpacity: 1, shadowRadius: 10, shadowColor: "grey", borderColor: "#2A2A2A", borderWidth: 1 }}>
                     <Text style={{ textAlign: "center", color: "#888", paddingTop: 10, fontSize: 15, fontWeight: 600 }}>{item.name}</Text>
-                    <Text style={{ textAlign: "center", color: "#BBB", paddingTop: 15 }}>{item.description}</Text>
+                    <Text numberOfLines={3} style={{ textAlign: "center", color: "#BBB", paddingTop: 15 }}>{item.description}</Text>
                 </View>
             </Pressable>
         </View>

@@ -1,16 +1,16 @@
 // import * as fs from 'fs';
 // import Papa from 'papaparse';
 
-// type ClubEntry = {
-//     name: string,
-//     description: string,
-//     link: string,
-//     facebook: string | null,
-//     linkedin: string | null,
-//     instagram: string | null,
-//     youtube: string | null,
-//     website: string
-// }
+type ClubEntry = {
+    name: string,
+    description: string,
+    link: string,
+    facebook: string | null,
+    linkedin: string | null,
+    instagram: string | null,
+    youtube: string | null,
+    website: string
+}
 
 
 
@@ -85,7 +85,7 @@ const Data: ClubData[] = [
     }
 ]
 
-function getClubByID(id: string): ClubEntry {
+function getClubByID(id: string) {
     // For now id is the club name
     // As we change the app we will possibly add a unique ID for each club
     for(let i = 0; i < Data.length; i++) {
@@ -93,9 +93,19 @@ function getClubByID(id: string): ClubEntry {
             return Data[i];
         }
     }
-
-    // Return smth if no match is found
-    return Data[0];
 }
+
+// function getClubByID(id: string): ClubEntry {
+//     // For now id is the club name
+//     // As we change the app we will possibly add a unique ID for each club
+//     for(let i = 0; i < Data.length; i++) {
+//         if(Data[i].name === id) {
+//             return Data[i];
+//         }
+//     }
+
+//     // Return smth if no match is found
+//     return Data[0];
+// }
 
 export { Data, getClubByID };
