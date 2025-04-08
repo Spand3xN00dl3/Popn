@@ -27,12 +27,16 @@ export default function LoginPage() {
             start={{ x: 1, y: 0 }}
             end={{ x: 0, y: 1 }}
             style={{ flex: 1 }}>
-                <SafeAreaView style={style.bg}>
+                <SafeAreaView style={styles.bg}>
                     <Logo />
-                    <View style={style.container}>
-                        <TextInput placeholder="Username" style={style.input} onChangeText={text => setUsername(text)} placeholderTextColor={"#605983"} />
-                        <TextInput placeholder="Password" style={style.input} onChangeText={text => setPassword(text)} placeholderTextColor={"#605983"} />
-                        <Text style={style.statusBar}>{status}</Text>
+                    <View style={styles.container}>
+                        <TextInput placeholder="Username" style={styles.input} onChangeText={text => setUsername(text)} placeholderTextColor={"#605983"} />
+                        {/* <TextInput placeholder="Password" style={style.input} onChangeText={text => setPassword(text)} placeholderTextColor={"#605983"} /> */}
+
+                        <PasswordInput setPassword={setPassword} />
+                        
+                        
+                        <Text style={styles.statusBar}>{status}</Text>
                         <SubmitButton text="Login" onClick={async () => {
                             if(auth) {
                                 const res: responseType = await auth.logIn(username, password);
@@ -45,7 +49,7 @@ export default function LoginPage() {
                             }
                             
                         }}/>
-                        <Link href={"/(auth)/signup"} style={style.signUp}>
+                        <Link href={"/(auth)/signup"} style={styles.signUp}>
                             Sign Up
                         </Link>
                         {/* <Link href={"/(test)"} style={{ backgroundColor: "white" }}>
@@ -56,6 +60,32 @@ export default function LoginPage() {
         </LinearGradient>
         
     )
+}
+
+type PasswordInputProps = {
+    setPassword: (value: string) => void
+}
+
+function PasswordInput({ setPassword}: PasswordInputProps) {
+    const [hidden, setHidden] = useState(true);
+    return (
+        <View style={styles.passContainer}>
+            <TextInput
+                placeholder="Password"
+                style={styles.passInput}
+                onChangeText={text => setPassword(text)}
+                placeholderTextColor="#605983"
+                // caretHidden={true}
+                secureTextEntry={hidden}
+            />
+            <Pressable
+                style={{ width: "20%", height: "100%", justifyContent: "center" }}
+                onPress={() => setHidden(!hidden)}
+            >
+                <Text style={{ color: "white", textAlign: "center" }}>{hidden ? "Show" : "Hide"}</Text>
+            </Pressable>
+        </View>
+    );
 }
 
 function Logo() {
@@ -73,7 +103,7 @@ function Logo() {
 }
 
 
-const style = StyleSheet.create({
+const styles = StyleSheet.create({
     bg: {
         flex: 1,
         // backgroundColor: "#352F44"
@@ -118,5 +148,34 @@ const style = StyleSheet.create({
         height: "auto",
         color: "red",
         fontSize: 15
+    },
+    passContainer: {
+        height: 45,
+        width: "70%",
+        justifyContent: "center",
+        borderColor: "#605983",
+        borderWidth: 1,
+        borderRadius: 8,
+        marginBottom: 25,
+        backgroundColor: "#0E0E0E",
+        flexDirection: "row"
+    },
+    passInput: {
+        width: "80%",
+        height: "100%",
+        // borderColor: "#444",
+        // borderWidth: 1,
+        paddingLeft: 15,
+        // backgroundColor: "#333",
+        // color: "#666699",
+        color: "white",
+        fontSize: 15,
+        // alignItems: "center",
+    },
+});
+
+const textStyles = StyleSheet.create({
+    toggleText: {
+        
     }
 });
