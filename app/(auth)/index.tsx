@@ -1,9 +1,8 @@
-import { View, Text, StyleSheet, TextInput, Pressable } from "react-native";
+import { View, Text, StyleSheet, TextInput, Image, Pressable } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useState, useContext } from "react";
 import { AuthContext, responseType } from "@/contexts/AuthContext";
 import { Link, Redirect, useRouter } from "expo-router";
-import Logo from "@/components/logo";
 import SubmitButton from "@/components/submitButton";
 import LinearGradient from "react-native-linear-gradient";
 
@@ -59,6 +58,20 @@ export default function LoginPage() {
     )
 }
 
+function Logo() {
+    return (
+        <View style={{ alignItems: "center" }}>
+            <Image
+                source={require("@/assets/images/Popn_Logo.png")}
+                style={{
+                    width: "100%",
+                    height: 400
+                }}
+            />
+        </View>
+    );
+}
+
 
 const style = StyleSheet.create({
     bg: {
@@ -106,4 +119,4 @@ const style = StyleSheet.create({
         color: "red",
         fontSize: 15
     }
-})
+});

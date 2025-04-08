@@ -69,11 +69,11 @@ export default function RootLayout() {
                     approved: true,
                     message: "success"
                 };
-            } else if(response.status===404) {
+            } else if(response.status === 404) {
                 return {
                     approved: false,
                     message: "Server Down/Not Found"
-                }
+                };
             }
             else {
                 const data: { error: string } = await response.json();
