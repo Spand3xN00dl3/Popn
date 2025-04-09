@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet } from "react-native";
-
+// gandu nikhil 
 export default function Logo() {
     return (
         <View style={style.container}>
@@ -23,3 +23,4 @@ const style = StyleSheet.create({
         color: "white"
     }
 });
+// gandu n
