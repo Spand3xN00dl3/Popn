@@ -5,6 +5,7 @@ import { AuthContext, responseType } from "@/contexts/AuthContext";
 import { Link, Redirect, useRouter } from "expo-router";
 import SubmitButton from "@/components/submitButton";
 import LinearGradient from "react-native-linear-gradient";
+import React from "react";
 
 export default function LoginPage() {
     const [username, setUsername] = useState("");
