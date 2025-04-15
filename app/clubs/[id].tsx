@@ -1,11 +1,12 @@
 import { useLocalSearchParams } from "expo-router";
 import LinearGradient from "react-native-linear-gradient";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Text, View, StyleSheet, FlatList } from "react-native";
+import { Text, View, StyleSheet, FlatList, useColorScheme } from "react-native";
 import { Link, useRouter } from "expo-router";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { getClubByID } from "@/data_temp/clubData";
 import { FacebookLogo, LinkedinLogo, InstagramLogo, YoutubeLogo } from "@/components/logos";
+import { APIContext } from "@/contexts/APIContext";
 
 type DataItem = {
     title: string,
@@ -95,7 +96,8 @@ function Header({ id }: HeaderProps) {
         youtube: "none",
         website: "none"
     });
-    const API_URL = `http://localhost:3000/clubs/${id}`;
+
+    const API_URL = useContext(APIContext);
 
     useEffect(() => {
         fetchData();
@@ -103,7 +105,7 @@ function Header({ id }: HeaderProps) {
 
     const fetchData = async () => {
         try {
-            const response = await fetch(API_URL);
+            const response = await fetch(API_URL + "/clubs/" + id);
             const json = await response.json();
             setData(json);
         } catch (error) {
