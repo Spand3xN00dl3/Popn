@@ -1,9 +1,10 @@
 import { Text, View, TextInput, StyleSheet, Pressable, ImageBackground, ScrollView, FlatList } from "react-native";
 import LinearGradient from 'react-native-linear-gradient';
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { BlurView } from "expo-blur"
 import { useRouter } from "expo-router";
+import { APIContext } from "@/contexts/APIContext";
 // import ClubList from "@/components/clubList";
 // import SearchBar from "@/components/searchBar";
 // import { SearchBar } from "react-native-screens";
@@ -19,17 +20,18 @@ type ItemProp = {
     item: ItemData,
 }
 
-const API_URL = "http://localhost:3000/clubs"
+// const API_URL = "http://localhost:3000/clubs"
 
 export default function ClubsPage() {
     const [Data, setData] = useState([]);
     useEffect(() => {
         fetchData();
     }, []);
+    const API_URL = useContext(APIContext);
 
     const fetchData = async () => {
         try {
-            const response = await fetch(API_URL);
+            const response = await fetch(API_URL + "/clubs");
             const json = await response.json();
             setData(json);
         } catch (error) {

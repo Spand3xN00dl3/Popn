@@ -1,15 +1,15 @@
+import { APIContext } from "@/contexts/APIContext";
 import { Link, useRouter } from "expo-router";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Text, View, Image, Pressable, StyleSheet, TextInput } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function CreateAccountPage() {
     const [paragraph, setParagraph] = useState("");
-    const router = useRouter();
+    const backendURL = useContext(APIContext);
 
     const queryClubsSearch = async () => {
-        const backendURL = "http://localhost:3000";
         console.log("trying to query backend");
         try {
             const response = await fetch(backendURL + "/recommend-clubs", {
@@ -26,6 +26,10 @@ export default function CreateAccountPage() {
             console.log("error in retrieving from backend");
         }
     };
+
+    const testThing = () => {
+        console.log("fuckin work bitch");
+    }
 
     return (
         <LinearGradient
