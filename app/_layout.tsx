@@ -1,5 +1,6 @@
 import { Redirect, Stack } from "expo-router";
 import { AuthContext, responseType } from "@/contexts/AuthContext";
+import { APIContext } from "@/contexts/APIContext";
 import { useState } from "react";
 import { AppRegistry } from "react-native";
 // import users from "@/backend/users.json"
@@ -10,7 +11,7 @@ import { AppRegistry } from "react-native";
 
 
 export default function RootLayout() {
-    const BackendAPI = "http://localhost:3000";
+    const BackendAPI = "https://popnbackend-dnf9dch5hkdackgc.centralus-01.azurewebsites.net";
     const [authorized, setAuthorized] = useState(false);
     const [username, setUsername] = useState("");
     const logIn = async (user: string, pass: string): Promise<responseType> => {
@@ -106,18 +107,20 @@ export default function RootLayout() {
             signUp: signUp,
             logOut: logOut
         }}>
-            <Stack>
-                <Stack.Screen name="(auth)" options={{
-                    headerShown: false,
-                }} />
-                <Stack.Screen name="home" options={{
-                    headerShown: false,
-                }} />
-                <Stack.Screen name="clubs/[id]" options={{
-                    headerShown: false,
-                }} />
-                {/* <Stack.Screen name="(auth)/signup/index" /> */}
-            </Stack>
+            <APIContext.Provider value="https://popnbackend-dnf9dch5hkdackgc.centralus-01.azurewebsites.net">
+                <Stack>
+                    <Stack.Screen name="(auth)" options={{
+                        headerShown: false,
+                    }} />
+                    <Stack.Screen name="home" options={{
+                        headerShown: false,
+                    }} />
+                    <Stack.Screen name="clubs/[id]" options={{
+                        headerShown: false,
+                    }} />
+                    {/* <Stack.Screen name="(auth)/signup/index" /> */}
+                </Stack>
+            </APIContext.Provider>
         </AuthContext.Provider>
     );
 }
